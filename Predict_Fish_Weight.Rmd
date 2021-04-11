@@ -40,19 +40,6 @@ Perchdata = subset (Perchdata, select = -Species)
 ```
 
 
-#Results
-
-<!--Divide this section into two sub-sections:  One for your descriptive  results and one for your inferential results.!-->
-
-## Descriptive Results
-
-### Graphical Descriptive Results
-
-<!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
-
-### Numerical Descriptive Results
-
-<!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ## Inferential Results
 
@@ -74,6 +61,8 @@ subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2
   
 ##Which is best??  
 
+The best model is the model that uses two variables: H and W.
+
 ```{r}
 which.max(summary.out$adjr2)
 ```
@@ -86,6 +75,8 @@ best.model <- lm(Weight~Height+Width,data=Perchdata)
 summary(best.model)
 fullup <- lm(Weight~.,data=Perchdata)
 ```
+
+The P-Value here is extremely small, meaning that this model was not made by chance, its an excellent fit.
 
 ```{r}
 anova(fullup,best.model)
@@ -109,19 +100,6 @@ Breamdata = subset (Breamdata, select = -Species)
 ```
 
 
-#Results
-
-<!--Divide this section into two sub-sections:  One for your descriptive  results and one for your inferential results.!-->
-
-## Descriptive Results
-
-### Graphical Descriptive Results
-
-<!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
-
-### Numerical Descriptive Results
-
-<!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ## Inferential Results
 
@@ -160,7 +138,9 @@ library(car)
 subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
 ```
   
-##Which is best??  
+## Which is best??  
+
+The best model is the model that uses 3 variables: L1, H and W.
 
 ```{r}
 which.max(summary.out$adjr2)
@@ -170,7 +150,7 @@ summary.out$which[3,]
 ```
 
 ```{r}
-best.model <- lm(Weight~Height+Width,data=Breamdata)
+best.model <- lm(Weight~Length2+Height,data=Breamdata)
 summary(best.model)
 fullup <- lm(Weight~.,data=Breamdata)
 ```
@@ -180,7 +160,7 @@ anova(fullup,best.model)
 ```
 
 
-The P-Value is 0.4027 it is a little smaller than the Perch P-Value, meaning that there is a litte different difference between using the model with all the data vs the model with only 2 variables.
+The P-Value is 0.5805 it is a big size as well, meaning that there is a no difference difference between using the best model that uses 3 variables vs the best model that uses only 2 variables.
 
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
@@ -199,19 +179,6 @@ Smeltdata = subset (Smeltdata, select = -Species)
 ```
 
 
-#Results
-
-<!--Divide this section into two sub-sections:  One for your descriptive  results and one for your inferential results.!-->
-
-## Descriptive Results
-
-### Graphical Descriptive Results
-
-<!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
-
-### Numerical Descriptive Results
-
-<!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
 ## Inferential Results
 
@@ -250,7 +217,8 @@ library(car)
 subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
 ```
   
-##Which is best??  
+## Which is best??  
+The best model is the one tha uses 4 variables, L1, L2, H, and W.
 
 ```{r}
 which.max(summary.out$adjr2)
@@ -260,7 +228,7 @@ summary.out$which[3,]
 ```
 
 ```{r}
-best.model <- lm(Weight~Height+Width,data=Smeltdata)
+best.model <- lm(Weight~Length2+Width,data=Smeltdata)
 summary(best.model)
 fullup <- lm(Weight~.,data=Smeltdata)
 ```
@@ -269,7 +237,7 @@ fullup <- lm(Weight~.,data=Smeltdata)
 anova(fullup,best.model)
 ```
 
-The P-Value is 0.05648 it is a smaller size P-VAlue compared to Perch and Bream P-Value, meaning that there is a difference between using the model with all the data vs the model with only 2 variables.
+The P-Value is 0.2521 it is too big to say that there is a difference between using the best model with 4 variables vs the best model with only 2 variables. 
 
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
@@ -278,4 +246,13 @@ The P-Value is 0.05648 it is a smaller size P-VAlue compared to Perch and Bream 
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+
+Based off the automatic selection of the variables in every case, it shows that there is no difference between using the model with two variables vs using the model with all variables. This was identified through the graphical depiction of the adjusted R-squared as well as the P-values.
+In conclusion when comparing the P-values of the two variable models, the P-values were so small that we reject the Null Hypothesis that these models are beneficial of predicting the weight of fish.
+And the P-values associated with the anovas were large and therefore showed that we failed to reject the Null Hypothesis, meaning that there is no difference  between using the model with two variables vs using the model with fullup variables.
+
+
+
+
+
 

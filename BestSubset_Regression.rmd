@@ -1,0 +1,96 @@
+---
+title: "BestSubset_Regression"
+author: "Dr K"
+date: "November 5, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+require(tidyverse)
+if(!require("Bolstad")) {install.packages("Bolstad");require("Bolstad")}
+
+data(bears)
+Bears <- select(bears,contains("e"),-Name)
+#Clean missing values out of dataset (needed to run Anova at end of demo)
+Bears<- na.omit(Bears)
+```
+## make a multiple regression model predicting Length, start with full model using p-value approach   
+
+```{r}
+fullup <- lm(Length~ .,data=Bears)
+summary.lm(fullup)
+```
+###Take out Head.W
+
+```{r}
+MODL7 <- lm(Length~ .-Head.W,data=Bears)
+summary.lm(MODL7)
+```
+###Now take out Weight
+
+```{r}
+MODL6 <- lm(Length~ .- Head.W-Weight,data=Bears)
+summary.lm(MODL6)
+```
+###Remove Age next
+```{r}
+MODL5 <- lm(Length~ .- Head.W-Weight-Age,data=Bears)
+summary.lm(MODL5)
+```
+###Now remove Neck.G  
+
+```{r}
+MODL4 <- lm(Length~ .- Head.W-Weight-Age-Neck.G,data=Bears)
+summary.lm(MODL4)
+```
+
+```{r}
+MODL3 <- lm(Length~ .- Head.W-Weight-Age-Neck.G-Sex,data=Bears)
+summary.lm(MODL3)
+```
+
+###AdjR^2 Started going down from 4 to 3 - so stop at 4
+
+
+
+
+#now automate
+
+
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Length ~ .,
+               data = Bears,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
+
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
+  
+##Which is best??  
+
+```{r}
+which.max(summary.out$adjr2)
+```
+```{r}
+summary.out$which[3,]
+```
+
+```{r}
+best.model <- lm(Length~Sex+Head.L+Chest.G,data=Bears)
+summary(best.model)
+```
+
+```{r}
+anova(fullup,best.model)
+```
+
